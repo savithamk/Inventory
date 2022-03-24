@@ -10,16 +10,23 @@ import Foundation
 class ItemList{
     var items = [Item]()
     
+    var inventory: ItemList!
+    
+    //Implementation for adding an item
+    func addItem(item: Item){
+        items.append(item)
+    }
+    
     //Implementation for deleting an item
-       func deleteItem(row: Int){
-           items.remove(at: row)
-       }
+    func deleteItem(row: Int){
+        items.remove(at: row)
+    }
     
     //Implementation for moving an item
-       func moveItem(from: Int, to: Int){
-           let temp = items[from]
-           deleteItem(row: from)
-           items.insert(temp, at: to)
-       }
+    func moveItem(from: Int, to: Int){
+        let temp = items[from]
+        deleteItem(row: from)
+        items.insert(temp, at: to)
+    }
     
 }

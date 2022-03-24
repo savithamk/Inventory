@@ -62,6 +62,7 @@ class ItemTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the row from the data source
+            inventory.deleteItem(row: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }
@@ -93,6 +94,10 @@ class ItemTableViewController: UITableViewController {
         
         dst.inventory = inventory;
         
+        if(segue.identifier == "edit"){
+            let senderRow: UITableViewCell = sender as! UITableViewCell
+            dst.index = tableView.indexPath(for: senderRow)?.row
+        }
     }
 
 }

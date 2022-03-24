@@ -19,12 +19,28 @@ class DetailsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        //Validating index and setting item data
+        if(nil != index){
+            let item = inventory.items[index!]
+            nameField.text = item.name
+            SKUField.text = item.SKU
+            descField.text = item.description
+            dateField.date = item.dateAdded
+        }
     }
     
-   
-    
-    
+    //Implenentation for for save or update an item
+    @IBAction func save(_ sender: Any) {
+    let item = Item(name: nameField.text!,SKU: SKUField.text!,description: descField.text!, dateAdded: dateField.date)
+    if(nil != index) {
+        inventory.items.remove(at: index!)
+        inventory.items.insert(item, at: index!)
+
+    }else {
+        inventory.addItem(item: item)
+    }
+    }
     // MARK: - Navigation
 /*
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -33,5 +49,5 @@ class DetailsViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
-
+    
 }
