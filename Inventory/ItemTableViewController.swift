@@ -11,6 +11,8 @@ class ItemTableViewController: UITableViewController {
     
     let inventory = ItemList()
     var selectedIndex:Int?
+    
+    var userDefaults = UserDefaults()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +22,14 @@ class ItemTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
          self.navigationItem.leftBarButtonItem = self.editButtonItem
+        
+        do {
+            if let data = userDefaults.object(forKey: "inventory") {
+                let decodedItems = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data as! Data) as? [Item]
+                inventory.items = decodedItems!
+            }
+        } catch  {}
+        
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -64,6 +74,7 @@ class ItemTableViewController: UITableViewController {
             // Delete the row from the data source
             inventory.deleteItem(row: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
+            updateUserDefaultsData()
         }
     }
     
@@ -72,6 +83,15 @@ class ItemTableViewController: UITableViewController {
     // Override to support rearranging the table view.
     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
         inventory.moveItem(from: fromIndexPath.row, to: to.row)
+        updateUserDefaultsData()
+    }
+    
+    func updateUserDefaultsData(){
+        do {
+            
+            let encodedItems = try NSKeyedArchiver.archivedData(withRootObject: inventory.items, requiringSecureCoding:false)
+            userDefaults.set(encodedItems, forKey: "inventory")
+        } catch  {}
     }
 
 
@@ -93,6 +113,7 @@ class ItemTableViewController: UITableViewController {
         let dst = segue.destination as! DetailsViewController
         
         dst.inventory = inventory;
+        dst.userDefaults =  userDefaults;
         
         if(segue.identifier == "edit"){
             let senderRow: UITableViewCell = sender as! UITableViewCell

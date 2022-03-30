@@ -11,6 +11,8 @@ class DetailsViewController: UIViewController {
 
     var inventory: ItemList!
     var index: Int?
+    
+    var userDefaults: UserDefaults!
 
     @IBOutlet weak var nameField: UITextField!
     @IBOutlet weak var SKUField: UITextField!
@@ -25,7 +27,7 @@ class DetailsViewController: UIViewController {
             let item = inventory.items[index!]
             nameField.text = item.name
             SKUField.text = item.SKU
-            descField.text = item.description
+            descField.text = item.desc
             dateField.date = item.dateAdded
         }
     }
@@ -40,6 +42,12 @@ class DetailsViewController: UIViewController {
     }else {
         inventory.addItem(item: item)
     }
+        do {
+            
+            let encodedItems = try NSKeyedArchiver.archivedData(withRootObject: inventory.items, requiringSecureCoding:false)
+            userDefaults.set(encodedItems, forKey: "inventory")
+        } catch  {}
+        
     }
     // MARK: - Navigation
 /*

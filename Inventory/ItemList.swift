@@ -10,8 +10,6 @@ import Foundation
 class ItemList{
     var items = [Item]()
     
-    var inventory: ItemList!
-    
     //Implementation for adding an item
     func addItem(item: Item){
         items.append(item)
